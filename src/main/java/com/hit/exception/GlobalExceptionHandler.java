@@ -9,6 +9,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result exceptionDisplay(Exception e){
         e.printStackTrace();
-        return Result.error("程序出现问题了");
+        return Result.error("程序错误");
     }
 }
