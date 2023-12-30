@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hit.mapper.UserBasicInformationMapper">
+
+    <!--    注册新用户-->
+    <insert id="register">
+        insert into user_management_system.users_basic_information(username, password, create_time, update_time)
+        values (#{username}, #{password}, #{createTime}, #{updateTime})
+    </insert>
+
+    <!--    更新用户基本信息-->
+    <update id="updateUserInformation">
+        update user_management_system.users_basic_information
+        <set>
+            <if test="username != null and username != ''">
+                username= #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password=#{password},
+            </if>
+            <if test="updateTime != null">
+                update_time=#{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--    根据ID删除用户-->
+    <delete id="deleteUserById">
+        delete
+        from user_management_system.users_basic_information
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--    根据ID查询用户基本信息-->
+    <select id="selectUserById" resultType="com.hit.pojo.UserBasicInformation">
+        select *
+        from user_management_system.users_basic_information
+        where id = #{id}
+    </select>
+
+    <!--    登录校验-->
+    <select id="login" resultType="com.hit.pojo.UserBasicInformation">
+        select *
+        from user_management_system.users_basic_information
+        where username = #{username}
+          and password = #{password}
+    </select>
+
+    <!--    批量条件查询-->
+    <select id="selectByPageHelper" resultType="com.hit.pojo.UserBasicInformation">
+        select *
+        from user_management_system.users_basic_information
+        <where>
+            <if test="username!=null and username!=''">username like concat('%', #{username}, '%')</if>
+            <if test="begin!=null and end!=null">and entrydate between #{begin} and #{end}</if>
+        </where>
+        order by update_time desc
+    </select>
+</mapper>

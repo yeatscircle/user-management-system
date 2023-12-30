@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hit.mapper.UserMapper">
+
+    <!--    添加新的用户履历-->
+    <insert id="addUser">
+        insert into user_management_system.users(user_id, name, birthday, job, introduction)
+        values (#{userId}, #{name}, #{birthday}, #{job}, #{introduction})
+    </insert>
+
+    <!--    更新用户信息-->
+    <update id="updateById">
+        update user_management_system.users
+        <set>
+            <if test="name != null and name != ''">
+                name= #{name},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender=#{gender},
+            </if>
+            <if test="birthday != null">
+                birthday=#{birthday},
+            </if>
+            <if test="job != null and job != ''">
+                job=#{job},
+            </if>
+            <if test="introduction != null and introduction != ''">
+                introduction=#{introduction},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--    批量删除用户履历信息-->
+    <delete id="deleteByIds">
+        delete
+        from user_management_system.users
+        where user_id in
+        <foreach collection="UserIds" item="UserId" separator="," open="(" close=")">
+            #{UserId}
+        </foreach>
+    </delete>
+
+    <!--    根据用户的Id筛选-->
+    <select id="selectById" resultType="com.hit.pojo.User">
+        select *
+        from user_management_system.users
+        where user_id = #{id}
+    </select>
+</mapper>
